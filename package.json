@@ -4,10 +4,11 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "start": "micro",
-    "dev": "micro-dev",
+    "start": "micro dist/bundle.js",
+    "dev": "micro-dev dist/bundle.js",
     "precommit": "lint-staged",
     "prepush": "npm test",
+    "build": "webpack",
     "test": "ava test.js"
   },
   "dependencies": {
@@ -23,16 +24,18 @@
     "API"
   ],
   "lint-staged": {
-    "*.{js,json,css,md}": ["prettier --write", "git add"]
+    "*.{js,json,md}": ["prettier --write", "git add"]
   },
   "devDependencies": {
     "ava": "1.0.0-beta.4",
     "husky": "latest",
-    "prettier": "latest",
     "lint-staged": "latest",
     "micro-dev": "^2.2.2",
+    "prettier": "latest",
     "request": "^2.85.0",
     "request-promise": "^4.2.2",
-    "test-listen": "^1.1.0"
+    "test-listen": "^1.1.0",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.15"
   }
 }
