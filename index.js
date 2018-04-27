@@ -22,6 +22,6 @@ module.exports = async (req, res) => {
     });
     res.end(jsonRes({ url: results.url, public_id: results.public_id }));
   } catch (e) {
-    return createError(400, "Invalid parameters");
+    return createError(e.statusCode, e.originalError.toString(), e.Error);
   }
 };
