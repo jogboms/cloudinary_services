@@ -4,6 +4,8 @@ import listen from "test-listen";
 import request from "request-promise";
 import app from ".";
 
+const { parse, stringify } = JSON;
+
 test("test w/o url", async t => {
   const service = micro(app);
   const uri = await listen(service);
@@ -11,7 +13,7 @@ test("test w/o url", async t => {
     method: "POST",
     uri: uri
   });
-  t.deepEqual(JSON.parse(body), { statusCode: 400 });
+  t.deepEqual(parse(body), { statusCode: 400 });
   service.close();
 });
 
@@ -21,12 +23,12 @@ test("test w/ url", async t => {
   const body = await request({
     method: "POST",
     uri: uri,
-    body: JSON.stringify({
+    body: stringify({
       url:
         "https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&h=350"
     })
   });
-  t.deepEqual(Object.keys(JSON.parse(body)), ["url", "public_id"]);
+  t.deepEqual(Object.keys(parse(body)), ["url", "public_id"]);
   service.close();
 });
 
@@ -36,12 +38,12 @@ test("test w/ url & public_id", async t => {
   const body = await request({
     method: "POST",
     uri: uri,
-    body: JSON.stringify({
+    body: stringify({
       url:
         "https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&h=350",
       public_id: "PUBLIC_ID"
     })
   });
-  t.deepEqual(Object.keys(JSON.parse(body)), ["url", "public_id"]);
+  t.deepEqual(Object.keys(parse(body)), ["url", "public_id"]);
   service.close();
 });
