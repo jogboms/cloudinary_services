@@ -1,20 +1,23 @@
 const { uploader, config } = require("cloudinary");
-const json = data => JSON.stringify(data);
+const jsonRes = data => JSON.stringify(data);
+const { json } = require("micro");
 
 config(require("./config"));
 
 module.exports = async (req, res) => {
+  const data = req && (await json(req));
+  console.log(data);
   const results = await new Promise((resolve, reject) => {
     uploader.upload(
-      "https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&h=350",
+      data.url,
       response => {
         if (response && response.error) {
           return reject(response.error);
         }
         resolve(response);
       },
-      { public_id: "newformattedId" }
+      data.public_id ? { public_id: data.public_id } : void 0
     );
   });
-  res.end(json(results));
+  res.end(jsonRes({ url: results.url }));
 };
